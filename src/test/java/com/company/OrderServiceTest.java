@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -39,7 +42,56 @@ public class OrderServiceTest {
         assertThat(retrievedOrder.getId(), is(equalTo(new BigDecimal("2016052019350000012"))));
     }
 
+    /**
+     * Tests that it is possible to add several orders, also that when the orders are retrieved back, we get the added
+     * orders.
+     */
+    @Test
+    public void addAndRetrieveMultipleOrders() {
+        // Start up the orderService.
+        OrderService orderService = new OrderService();
+        List<Order> addedOrders = new ArrayList<>();
+
+        Random random = new Random();
+
+        // => create some orders on random dates for some customers.
+        int customerCount = random.nextInt(1000) + 1;
+        for (int customerId = 1; customerId < customerCount; customerId++) {
+            // for each customer
+            List<LocalDateTime> randomDates = getRandomDates();
+            for (LocalDateTime randomDate : randomDates) {
+                //create an order and add to the orderService.
+                Order testOrder = createTestOrder(customerId, randomDate);
+                orderService.addOrder(testOrder);
+                addedOrders.add(testOrder);
+            }
+        }
+
+        // Now verify that all orders are retrievable by orderService.
+        List<Order> retrievedOrders = orderService.getAllOrders();
+        assertThat(retrievedOrders.size(), is(equalTo(addedOrders.size())));
+
+        // Also verify that all the orders in the tests cached list is present in the orderService.
+        addedOrders.forEach(order -> {
+            assertThat(retrievedOrders.contains(order), is(true));
+        });
+    }
+
     private Order createTestOrder(int customerId, LocalDateTime dateTime) {
         return new Order(customerId, dateTime);
+    }
+
+    /** Gets some random dates. The number of dates is random between 1 and 100. */
+    private List<LocalDateTime> getRandomDates() {
+        List<LocalDateTime> returnValue = new ArrayList<>();
+        Random random = new Random();
+
+        LocalDateTime now = LocalDateTime.now();
+        int numberOfDates = random.nextInt(100) + 1;
+        for (int i = 0; i < numberOfDates; i++) {
+            int hours = random.nextInt();
+            returnValue.add(now.minusHours(hours));
+        }
+        return returnValue;
     }
 }
