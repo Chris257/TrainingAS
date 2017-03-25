@@ -5,5 +5,12 @@ package com.company;
  * @author Frank Karlstrøm - frank.karlstrom@gmail.com - fk@databaseforum.no
  */
 class OrderService {
-    //TODO implement me
+
+   public void addOrder(Order order){
+   }
+
+   public Order getOrder(String orderId){
+       Order order = new Order();
+       return order;
+   }
 }

@@ -7,7 +7,7 @@ package com.company;
 class Order {
 
     String getId() {
-        //TODO implement me
-        return null;
+        String id = "";
+        return id;
     }
 }
