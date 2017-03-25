@@ -2,6 +2,7 @@ package com.company;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents an order of some kind in this system.
@@ -33,7 +34,8 @@ class Order {
      * @return a BigDecimal representing the order id.
      */
     BigDecimal getId() {
-        //TODO implement me
-        return null;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+        BigDecimal id = new BigDecimal(dtf.format(this.datetime)+Long.toString(this.customerId));
+        return id;
     }
 }
