@@ -3,6 +3,10 @@ package com.company;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Represents an order of some kind in this system.
@@ -14,14 +18,48 @@ class Order {
     /** Immutable field, it should not be possible to change the timestamp for an order. */
     private final LocalDateTime datetime;
 
+    private long waitressId;
+    private long restaurantId;
+
     /**
      * Creates a new order with the specified id.
      * The id for an order must be unique, thus we use a combination of date and time, and a customer id
      * as a unique identifier.
      */
-    Order(long customerId, LocalDateTime datetime) {
-        this.customerId = customerId;
-        this.datetime = datetime;
+    Order(long customerId, long waitressId, long restaurantId, LocalDateTime datetime) {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime openingDate = LocalDateTime.of(2012, 5, 20, 19, 35, 0, 0);
+        if (datetime.isAfter(today)){
+            throw new IllegalArgumentException ("Date cannot be in the future");
+        }else if (datetime.isBefore(openingDate)){
+            throw new IllegalArgumentException ("Date cannot be before opening date");
+        }else{
+            this.customerId = customerId;
+            this.waitressId = waitressId;
+            this.restaurantId = restaurantId;
+            this.datetime = datetime;
+
+        }
+    }
+
+    public long getWaitressId() {
+        return waitressId;
+    }
+
+    public long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setWaitressId(long waitressId) {
+        this.waitressId = waitressId;
+    }
+
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     /**
@@ -37,5 +75,15 @@ class Order {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
         BigDecimal id = new BigDecimal(dtf.format(this.datetime)+Long.toString(this.customerId));
         return id;
+    }
+
+    private Map<String, Integer> menuItems = new LinkedHashMap<>();
+
+    public void addLine(String menuItem, Integer quantity){
+        this.menuItems.put(menuItem,quantity);
+    }
+
+    ArrayList getMenuItems() {
+        return new ArrayList<>(menuItems.keySet());
     }
 }

@@ -26,8 +26,10 @@ public class OrderServiceTest {
         // => Setup, create necessary objects
         // Create an initial test order for a fictive customer id at a specified point in time.
         int customerId = 12;
+        int waitressId = 2;
+        int restaurantId = 7;
         LocalDateTime dateTime = LocalDateTime.of(2016, 5, 20, 19, 35, 0, 0);
-        Order order = createTestOrder(customerId, dateTime);
+        Order order = createTestOrder(customerId, waitressId, restaurantId, dateTime);
         // Start up the orderService.
         OrderService orderService = new OrderService();
 
@@ -53,6 +55,8 @@ public class OrderServiceTest {
         List<Order> addedOrders = new ArrayList<>();
 
         Random random = new Random();
+        int waitressId = 2;
+        int restaurantId = 7;
 
         // => create some orders on random dates for some customers.
         int customerCount = random.nextInt(1000) + 1;
@@ -61,7 +65,7 @@ public class OrderServiceTest {
             List<LocalDateTime> randomDates = getRandomDates();
             for (LocalDateTime randomDate : randomDates) {
                 //create an order and add to the orderService.
-                Order testOrder = createTestOrder(customerId, randomDate);
+                Order testOrder = createTestOrder(customerId,waitressId,restaurantId,randomDate);
                 orderService.addOrder(testOrder);
                 addedOrders.add(testOrder);
             }
@@ -77,8 +81,8 @@ public class OrderServiceTest {
         });
     }
 
-    private Order createTestOrder(int customerId, LocalDateTime dateTime) {
-        return new Order(customerId, dateTime);
+    private Order createTestOrder(int customerId, int waitressId, int restaurantId, LocalDateTime dateTime) {
+        return new Order(customerId,waitressId,restaurantId, dateTime);
     }
 
     /** Gets some random dates. The number of dates is random between 1 and 100. */
