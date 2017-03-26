@@ -1,11 +1,17 @@
 package com.company;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * Initializes this application.
+ * @author Frank Karlstrøm - frank.karlstrom@gmail.com - fk@databaseforum.no
+ */
+@SpringBootApplication
 public class Main {
-    /**
-     * This should start processing incoming orders, but don't actually do anything yet, since we have not defined how
-     * the orders enters the system.
-     */
+
     public static void main(String[] args) {
-        System.out.println("Nothing here yet");
+        SpringApplication.run(Main.class, args);
     }
 }
+
