@@ -1,5 +1,7 @@
 package com.company;
 
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -7,6 +9,7 @@ import java.util.*;
  * Service class that contains all the business logic for adding and fetching orders.
  * @author Frank Karlstrøm - frank.karlstrom@gmail.com - fk@databaseforum.no
  */
+@Service
 class OrderService {
     private Map<BigDecimal, Order> orders = new HashMap<>();
 

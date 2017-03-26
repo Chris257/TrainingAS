@@ -3,8 +3,6 @@ package com.company;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,11 +27,11 @@ class Order {
     Order(long customerId, long waitressId, long restaurantId, LocalDateTime datetime) {
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime openingDate = LocalDateTime.of(2012, 5, 20, 19, 35, 0, 0);
-        if (datetime.isAfter(today)){
-            throw new IllegalArgumentException ("Date cannot be in the future");
-        }else if (datetime.isBefore(openingDate)){
-            throw new IllegalArgumentException ("Date cannot be before opening date");
-        }else{
+        if (datetime.isAfter(today)) {
+            throw new IllegalArgumentException("Date cannot be in the future");
+        } else if (datetime.isBefore(openingDate)) {
+            throw new IllegalArgumentException("Date cannot be before opening date");
+        } else {
             this.customerId = customerId;
             this.waitressId = waitressId;
             this.restaurantId = restaurantId;
@@ -41,6 +39,7 @@ class Order {
 
         }
     }
+
 
     public long getWaitressId() {
         return waitressId;
@@ -73,17 +72,35 @@ class Order {
      */
     BigDecimal getId() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        BigDecimal id = new BigDecimal(dtf.format(this.datetime)+Long.toString(this.customerId));
+        BigDecimal id = new BigDecimal(dtf.format(this.datetime) + Long.toString(this.customerId));
         return id;
     }
 
     private Map<String, Integer> menuItems = new LinkedHashMap<>();
 
-    public void addLine(String menuItem, Integer quantity){
-        this.menuItems.put(menuItem,quantity);
+    public void addLine(String menuItem, int quantity) {
+        if (menuItems.containsKey(menuItem)) {
+            int existing = menuItems.get(menuItem);
+            menuItems.put(menuItem, existing + quantity);
+        } else {
+            this.menuItems.put(menuItem, quantity);
+        }
     }
 
-    ArrayList getMenuItems() {
-        return new ArrayList<>(menuItems.keySet());
+    Map<String, Integer> getMenuItems() {
+        return menuItems;
+    }
+
+    /** A simple to string implementation to let us quickly see our order just by doing toString(). */
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Order{");
+        sb.append("customerId=").append(customerId);
+        sb.append(", datetime=").append(datetime);
+        sb.append(", waitressId=").append(waitressId);
+        sb.append(", restaurantId=").append(restaurantId);
+        sb.append(", menuItems=").append(menuItems);
+        sb.append('}');
+        return sb.toString();
     }
 }
