@@ -40,6 +40,7 @@ class Order {
         }
     }
 
+    public LocalDateTime getDatetime() { return datetime; }
 
     public long getWaitressId() {
         return waitressId;
